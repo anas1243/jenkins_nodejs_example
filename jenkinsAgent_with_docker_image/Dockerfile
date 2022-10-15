@@ -1,6 +1,6 @@
 FROM jenkins/ssh-agent:latest-jdk11
 USER root
-RUN apt-get update && apt-get install -y lsb-release curl git
+RUN apt-get update && apt-get install -y lsb-release curl git 
 RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
     https://download.docker.com/linux/debian/gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) \
@@ -8,4 +8,6 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
     https://download.docker.com/linux/debian \
     $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 RUN apt-get update && apt-get install -y docker-ce-cli
+RUN groupadd -r docker -g 1010 && usermod -aG docker jenkins
 USER jenkins
+RUN newgrp docker
